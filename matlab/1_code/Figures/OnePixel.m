@@ -1,4 +1,6 @@
 close all;
+cd(fileparts(mfilename('fullpath')))
+
 c = pwd;
 disp(mfilename('fullpath'));
 %p = uigetdir();
@@ -112,8 +114,38 @@ end
 %% Contact radius
 f2 = figure(2);
 f2.Position = [526 457 560*0.75 420*0.75];
+
+%Coordinates of the drop
+f = @(theta, idx) z(idx) + zs_from_spherical(theta, oscillation_amplitudes(:, idx));
+% Coordinates of the fluid
+x = dr*(0:(max(numl)-1));
+y = etas(1:max(numl), index_to_plot) + 0.01;
+ 
+pressed_radius = zeros(1, numel(index_to_plot));
+for ii=index_to_plot
+    fun = @(theta) z(ii) + zs_from_spherical(theta, oscillation_amplitudes(:, ii)) ...
+        <= interp1(x, y(:, ii), r_from_spherical(theta, oscillation_amplitudes(:, ii)), 'linear');
+    theta_0 = pi/2;
+    theta_1 = pi;
+    while theta_1 - theta_0 > 1e-4
+       theta_mid = (theta_1 + theta_0)/2;
+       f_value = fun(theta_mid);
+       if f_value == true
+           theta_1 = theta_mid;
+       else
+           theta_0 = theta_mid;
+       end
+    end
+    
+    theta_min = theta_mid;
+    
+    pressed_radius(ii) = r_from_spherical(theta_min, oscillation_amplitudes(:, ii));
+end
+
+
 PressedRad = plot(tvec_p,dr*numl(index_to_plot), 'color', deep_blue, 'LineWidth', 4);
 hold on;  plotter('c_radius');
+plot(tvec_p,pressed_radius, '--','color', verdinho, 'LineWidth', 4);
 set(gca,'FontSize',16); %,'xlim',[0 16],'ylim',[-2 8])
 xlabel('   $t/T_s $   ','interpreter','LaTeX','FontSize',26)
 ylabel('$r_c/R_s$','interpreter','LaTeX','FontSize',26,'Rotation',90)
@@ -178,3 +210,4 @@ function plotter(prefixString)
         end
     end
 end
+

@@ -7,6 +7,8 @@ curr = pwd;
 saving_figure = fullfile(pwd, "..", "D50Quant100", "rho1000sigma7220nu98muair0", "RhoS1000SigmaS7220", "R0350mm", "ImpDefCornerAng180U39", "N=20tol=5.00e-05"); % uigetdir();
 cd(saving_figure);
 
+AXIS_FONT = 19;
+
 global errored
 errored = ~isfile('z.mat');
 try
@@ -85,23 +87,8 @@ etaOriplot = etaOri(1:end-1);
 zmin = min(min(etaMatPer));
 zmax = max(max(etaMatPer));
 
-% if errored
-%     file_name = 'errored_WavesAndDrop.mp4';
-% else
-%     file_name = 'WavesAndDrop.mp4';
-% end
-% vidObj = VideoWriter(file_name,'MPEG-4');
-% set(vidObj,'FrameRate',10)
-% open(vidObj);
-
-%Gamma = 0; %%
-%wzero = 1; %%
-%thetaZero = 0; %%
-%zb = Gamma/(Fr*wzero^2)*cos(wzero*tvec+thetaZero); %Elevation of the pool
-%zbplot=zb; %(1:end-1);
-
 saving_figure = figure();
-saving_figure.Position = [100, 300, 866*0.75, 428*0.75];
+saving_figure.Position = [100, 300, 1080*0.75, 428*0.75];
 N = floor(size(etaMatPer, 2)*0.8); M = floor(1.2/dr);
 pfield_radial = zeros(M, N);
 indexes = floor(linspace(1, size(etaMatPer,2), N));
@@ -130,13 +117,13 @@ idxs = 2:20;
 idxs = idxs(max(abs(plot_oscillations(1:idxs(end), :)), [] , 2) > 5e-3); %2.^(1:floor(log2(nb_harmonics)));
 %cmap = colormap('spring'); %disp(size(cmap));
 %numColors = size(cmap, 1);
-lol = jet(length(idxs)+2);
-colororder(flipud(lol(3:end, :)));%cmap(floor(linspace(1, numColors, length(idxs))), :));
+lol = parula(length(idxs)+2);
+set(gca, 'ColorOrder', (lol(3:end, :)));%cmap(floor(linspace(1, numColors, length(idxs))), :));
 %disp(size(times)); disp(size(deformation_amplitudes));
 %plot(tvec(indexes), (plot_oscillations(idxs, :)), 'LineWidth',2);
 
 for ii = 2:11
-     plot(tvec(indexes), plot_oscillations(ii, :), 'LineWidth', 5-3*log10(ii),  'DisplayName', sprintf("A_{%d}(t)", ii));
+     plot(tvec(indexes), plot_oscillations(ii, :), 'LineWidth', 5-3*log10(ii),  'DisplayName', sprintf("$A_{%d}(t)$", ii));
 end
 
 
@@ -146,13 +133,18 @@ set(gca,'FontName','Times','FontSize',18);
 set(gca,'defaultTextInterpreter','tex', ...
           'defaultAxesTickLabelInterpreter','tex', ...
           'defaultLegendInterpreter','tex');
-xlabel('  t/T_d   ','FontName','Latin Modern Roman','FontSize',22, 'FontAngle', 'italic')
+xlabel('  t/T_d   ','FontName','Latin Modern Roman','FontSize',AXIS_FONT, 'FontAngle', 'italic')
 ylabel(' r/R_d','FontName','Latin Modern Roman',...
     'FontSize',22,'rotation',90, 'FontAngle', 'italic')
 %legend(arrayfun(@(i) sprintf("Mode %d", i), idxs), 'FontSize', 15);
-hl = legend('show', 'Location','eastoutside', 'FontSize', 14, 'FontName', 'Times');
+hl = legend('show', 'Location','eastoutside', 'FontSize', AXIS_FONT, 'FontName', 'Times', 'interpreter', 'latex');
 yl = get(gca, 'YLim'); yl = [-.8*max(abs(yl)), .8*max(abs(yl))];
 set(gca, 'YLim', yl); set(gca, 'XLim', [tvec(1) tvec(end)]);
+
+
+xlabel('$t / T_d$', 'Interpreter', 'latex', 'FontName', 'Times New Roman', 'FontSize', 5+AXIS_FONT);
+ylabel('$A_l / R_d$', 'Interpreter', 'latex', 'FontName', 'Times New Roman', 'FontSize', 5+AXIS_FONT);
+
 box on
 grid on
 %xlim([0, 1]); ylim([0, 5]);
@@ -180,8 +172,8 @@ hContact = patch('XData',NaN,'YData',NaN, ...  % NaNs so it doesn't affect limit
 
 % Build the extra legend
 lgd2 = legend(axGhost, hContact, {'Contact region'}, ...
-    'Location','northwest', 'FontSize',18, 'FontName','Times', ...
-    'Interpreter','tex', 'AutoUpdate','off');
+    'Location','northwest', 'FontSize',AXIS_FONT, 'FontName','Times', ...
+    'Interpreter','latex', 'AutoUpdate','off');
 
 % Make sure the legend is actually on top of everything
 uistack(lgd2,'top');              % <-- this is the key fix
@@ -194,8 +186,8 @@ linkprop([ax axGhost], {'Position','XLim','YLim'});  % keep aligned
 cd(curr);
 set(gcf,'Renderer','painters');
 saveas(saving_figure, "../../0_data/manual/amplitude_plotter_paper", 'fig');
-%print(saving_figure, '-depsc', '-r300', "../../0_data/manual/amplitude_plotter_paper.eps");
-exportgraphics(saving_figure, "../../0_data/manual/amplitude_plotter_paper.eps", 'ContentType','vector');
+print(saving_figure, '-depsc', '-r300', "../../0_data/manual/amplitude_plotter_paper.eps");
+%exportgraphics(saving_figure, "../../0_data/manual/amplitude_plotter_paper.eps", 'ContentType','vector');
 
 
 function load_vars(str)
