@@ -146,7 +146,7 @@ xlabel('$t / T_d$', 'Interpreter', 'latex', 'FontName', 'Times New Roman', 'Font
 ylabel('$A_l / R_d$', 'Interpreter', 'latex', 'FontName', 'Times New Roman', 'FontSize', 5+AXIS_FONT);
 
 box on
-grid on
+grid off
 %xlim([0, 1]); ylim([0, 5]);
 %title('Contact radius and pressure field evolution');
 
@@ -186,7 +186,7 @@ linkprop([ax axGhost], {'Position','XLim','YLim'});  % keep aligned
 cd(curr);
 set(gcf,'Renderer','painters');
 saveas(saving_figure, "../../0_data/manual/amplitude_plotter_paper", 'fig');
-print(saving_figure, '-depsc', '-r300', "../../0_data/manual/amplitude_plotter_paper.eps");
+print(saving_figure, '-depsc', '-painters', "../../0_data/manual/amplitude_plotter_paper.eps");
 %exportgraphics(saving_figure, "../../0_data/manual/amplitude_plotter_paper.eps", 'ContentType','vector');
 
 
