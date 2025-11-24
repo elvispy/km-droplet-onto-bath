@@ -147,6 +147,7 @@ ylabel('$A_l / R_d$', 'Interpreter', 'latex', 'FontName', 'Times New Roman', 'Fo
 
 box on
 grid off
+set(gca, 'LineWidth', 1.2);
 %xlim([0, 1]); ylim([0, 5]);
 %title('Contact radius and pressure field evolution');
 
