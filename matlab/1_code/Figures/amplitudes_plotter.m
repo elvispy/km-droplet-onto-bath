@@ -156,9 +156,12 @@ set(gca, 'LineWidth', 1.2, 'Layer', 'top');
 ax = gca;
 
 % Ghost axis exactly over the main axis, invisible & non-interactive
-axGhost = axes('Position', ax.Position, 'Color','none', 'Visible','off', ...
-    'XLim', ax.XLim, 'YLim', ax.YLim, 'HitTest','off', ...
-    'XColor','none','YColor','none');
+
+axGhost = axes('Position', ax.Position, 'Color','none', 'Visible','on', ...
+    'XTick', [], 'YTick', [], ...         % Hide the numbers
+    'Box', 'on', 'LineWidth', 1.2, ...    % Draw the Box Frame here
+    'XLim', ax.XLim, 'YLim', ax.YLim, ... 
+    'HitTest','off');
 if isprop(axGhost,'PickableParts'), set(axGhost,'PickableParts','none'); end
 
 % Dummy swatch for "Contact region" (match your patch style)
