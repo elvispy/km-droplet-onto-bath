@@ -190,10 +190,13 @@ linkprop([ax axGhost], {'Position','XLim','YLim'});  % keep aligned
 cd(curr);
 set(gcf,'Renderer','painters');
 saveas(saving_figure, "../../0_data/manual/amplitude_plotter_paper", 'fig');
-print(saving_figure, '-depsc', '-painters', "../../0_data/manual/amplitude_plotter_paper.eps");
-%exportgraphics(saving_figure, "../../0_data/manual/amplitude_plotter_paper.eps", 'ContentType','vector');
 
-
+try
+    exportgraphics(saving_figure, "../../0_data/manual/amplitude_plotter_paper.eps", 'ContentType','vector');
+catch
+    print(saving_figure, '-depsc', '-painters', "../../0_data/manual/amplitude_plotter_paper.eps");
+    warning('Exportgraphics not available. Consider upgrading your matlab version');
+end
 function load_vars(str)
     global errored
     
