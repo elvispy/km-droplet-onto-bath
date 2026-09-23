@@ -11,7 +11,7 @@ The code simulates non-coalescing, axisymmetric impacts of droplets on deep liqu
 
 ![Graphical abstract](matlab/0_data/manual/GraphicalAbstract.jpg)
 
-## What problem does this code solve?
+This repository accompanies the manuscript “Droplet rebounds off a fluid bath: kinematic match simulations and experiments.” It contains MATLAB code and precomputed data to simulate non‑coalescing droplet–bath impacts using the full kinematic‑match (KM) framework, extended to include droplet deformation. The solver predicts the time‑evolving contact area, pressure distribution, and wave field on both bodies. Automation scripts generate parameterized folder trees, run sweeps (water/oil presets), and aid post‑processing and figure reproduction.
 
 A small droplet can bounce from a liquid bath without coalescing if a thin gas layer persists during impact. The KM model used here does not resolve that gas film directly. Instead, it replaces the film by an idealized pressure-transmitting contact region and enforces the geometric and kinematic constraints that the two liquid interfaces must satisfy while they remain separated.
 
